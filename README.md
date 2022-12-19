@@ -18,7 +18,7 @@ node server
 + The WebSocket server for WebF Client will be listening at `ws://127.0.0.1:8090`.
 + The WebSocket server for Chrome DevTools will be listening at `ws://127.0.0.1:8091`.
 
-### 2. On the WebF, Use `RemoteDevServerService` connect to this server
+### 2. On the WebF, Use `RemoteDevServerService` to connect to this server
 
 ```dart
 WebF(
@@ -37,6 +37,6 @@ devtools://devtools/bundled/inspector.html?ws=127.0.0.1:8091
 
 ### 4. Done
 
-The DevTools will be works.
+The DevTools works.
 
 ![img](./screenshots.png)
