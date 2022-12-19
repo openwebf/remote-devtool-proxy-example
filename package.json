@@ -1,0 +1,22 @@
+{
+  "name": "remote-devtool-proxy-example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/openwebf/remote-devtool-proxy-example.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/openwebf/remote-devtool-proxy-example/issues"
+  },
+  "homepage": "https://github.com/openwebf/remote-devtool-proxy-example#readme",
+  "dependencies": {
+    "websocket": "^1.0.34"
+  }
+}
