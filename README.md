@@ -1,7 +1,7 @@
 remote-devtool-proxy-example
 ---------------------
 
-This demo's code just shows how to write a dev tool proxy to work with WebF RemoteDevServerService. So you can let Chrome DevTools connect to our own service without worrying about the IP address of your WebF App.
+This demo's code demonstrates how to write a dev tool proxy that works with the WebF RemoteDevServerService. This allows you to let Chrome DevTools connect to your own service without worrying about the IP address of your WebF App.
 
 It's dangerous to deploy a dev tool service without any Security check. 
 
