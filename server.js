@@ -2,7 +2,7 @@ const WebSocketServer = require('websocket').server;
 const http = require('http');
 
 function createWebSocketServer(port, options = {}) {
-    var server = http.createServer(function (request, response) {
+    const server = http.createServer(function (request, response) {
         console.log((new Date()) + ' Received request for ' + request.url);
         response.writeHead(404);
         response.end();
@@ -23,22 +23,22 @@ function createWebSocketServer(port, options = {}) {
             options.onRequest(request);
         }
 
-        var connection = request.accept();
+        const connection = request.accept();
         connection.on('message', function (message) {
             if (options.onMessage) {
-                options.onMessage(message, connection);
+                options.onMessage(message, connection, request);
             }
         });
         connection.on('close', function (reasonCode, description) {
             console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
             if (options.onClose) {
-                options.onClose(reasonCode, description, connection);
+                options.onClose(reasonCode, description, connection, request);
             }
         });
         if (options.onConnect) {
-            options.onConnect(connection);
+            options.onConnect(connection, request);
         }
-        
+
     });
 }
 
@@ -50,28 +50,42 @@ const webfPort = 8090;
 const devToolPort = 8091;
 
 
-let webfConnection;
-let devToolsConnection;
+let webfConnection = {};
+let devToolsConnection = {};
 
 createWebSocketServer(webfPort, {
-    onConnect: (connect) => {
-        console.log('webf client connected');
-        webfConnection = connect;
+    onConnect: (connect, request) => {
+        console.log('webf client connected:', request.resource);
+        webfConnection[request.resource] = connect;
     },
-    onMessage: (message, connection) => {
-        if (devToolsConnection) {
-            devToolsConnection.sendUTF(message.utf8Data);
+    onMessage: (message, connection, request) => {
+        if (devToolsConnection[request.resource]) {
+            devToolsConnection[request.resource].sendUTF(message.utf8Data);
         }
+    },
+    onClose: (reasonCode, description, connection, request) => {
+        webfConnection[request.resource] = null;
+    },
+    onRequest: (request) => {
+
     }
 });
 
 createWebSocketServer(devToolPort, {
-    onConnect: (connection) => {
-        devToolsConnection = connection;
+    onConnect: (connection, request) => {
+        console.log('devTool connected:', request.resource);
+        devToolsConnection[request.resource] = connection;
     },
-    onMessage: (message, connection) => {
-        if (webfConnection) {
-            webfConnection.sendUTF(message.utf8Data);
+    onMessage: (message, connection, request) => {
+        // 找到对应的 ws, 并转发消息过去
+        if (webfConnection[request.resource]) {
+            webfConnection[request.resource].sendUTF(message.utf8Data);
         }
+    },
+    onClose: (reasonCode, description, connection, request) => {
+        devToolsConnection[request.resource] = null
+    },
+    onRequest: (request) => {
+
     }
 });
