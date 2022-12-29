@@ -40,3 +40,8 @@ devtools://devtools/bundled/inspector.html?ws=127.0.0.1:8091
 The DevTools works.
 
 ![img](./screenshots.png)
+
+## Docker build
+```shell
+docker build --platform linux/amd64 -t devtool-proxy:0.3 .
+```
